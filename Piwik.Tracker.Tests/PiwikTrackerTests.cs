@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Web;
-using System.Web.Script.Serialization;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -381,7 +380,7 @@ namespace Piwik.Tracker.Tests
             {
                 { "",new object[] {sku, name, categoryList, price.ToString("0.##", CultureInfo.InvariantCulture), quantity}}
             };
-            var expectedAsJson = new JavaScriptSerializer().Serialize(expected.Values);
+            var expectedAsJson = JsonConvert.SerializeObject(expected.Values);
             Console.WriteLine(expectedAsJson);
             Assert.That(actual, Does.Contain("&ec_items=" + HttpUtility.UrlEncode(expectedAsJson)));
         }
@@ -424,7 +423,7 @@ namespace Piwik.Tracker.Tests
                         {
                             continue;
                         }
-                        Assert.That(variableValue, Is.EquivalentTo(new[] { "_pkc", new JavaScriptSerializer().Serialize(categoryList) }));
+                        Assert.That(variableValue, Is.EquivalentTo(new[] { "_pkc", JsonConvert.SerializeObject(categoryList) }));
                         break;
 
                     case PiwikTracker.CvarIndexEcommerceItemSku:
