@@ -31,9 +31,10 @@ namespace Piwik.Tracker
             {
                 throw new ArgumentNullException(nameof(valueToEncrypt));
             }
-            using (var provider = new SHA1CryptoServiceProvider())
+
+            using (var hasher = SHA1.Create())
             {
-                var encodedBytes = provider.ComputeHash(valueToEncrypt);
+                var encodedBytes = hasher.ComputeHash(valueToEncrypt);
                 var sb = new StringBuilder();
                 foreach (byte b in encodedBytes)
                 {
