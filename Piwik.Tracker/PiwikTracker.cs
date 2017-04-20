@@ -15,6 +15,7 @@ namespace Piwik.Tracker
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Text.RegularExpressions;
@@ -1322,7 +1323,7 @@ namespace Piwik.Tracker
                 return null;
             }
 
-            var cookieDecoded = JsonConvert.DeserializeObject<string[]>(HttpUtility.UrlDecode(refCookie.Value ?? string.Empty));
+            var cookieDecoded = JsonConvert.DeserializeObject<string[]>(UrlDecode(refCookie.Value ?? string.Empty));
 
             if (cookieDecoded == null)
             {
@@ -1749,28 +1750,33 @@ namespace Piwik.Tracker
                 return new Dictionary<string, string[]>();
             }
 
-            return JsonConvert.DeserializeObject<Dictionary<string, string[]>>(HttpUtility.UrlDecode(cookie.Value ?? string.Empty)) ??
+            return JsonConvert.DeserializeObject<Dictionary<string, string[]>>(UrlDecode(cookie.Value ?? string.Empty)) ??
                          new Dictionary<string, string[]>();
         }
 
-        private string FormatDateValue(DateTimeOffset date)
+        private static string FormatDateValue(DateTimeOffset date)
         {
             return date.ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss");
         }
 
-        private string FormatMonetaryValue(double value)
+        private static string FormatMonetaryValue(double value)
         {
             return value.ToString("0.##", new CultureInfo("en-US"));
         }
 
-        private string FormatGeoLocationValue(float value)
+        private static string FormatGeoLocationValue(float value)
         {
             return value.ToString(new CultureInfo("en-US"));
         }
 
-        private string UrlEncode(string value)
+        private static string UrlEncode(string value)
         {
-            return HttpUtility.UrlEncode(value);
+            return WebUtility.UrlEncode(value);
+        }
+
+        private static string UrlDecode(string value)
+        {
+            return WebUtility.UrlDecode(value);
         }
     }
 }

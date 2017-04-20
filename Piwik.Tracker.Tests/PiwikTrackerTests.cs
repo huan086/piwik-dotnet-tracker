@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
-using System.Web;
 using Newtonsoft.Json;
 using NUnit.Framework;
 
@@ -103,7 +103,7 @@ namespace Piwik.Tracker.Tests
             }
             else
             {
-                Assert.That(actual, Does.Contain("&url=" + HttpUtility.UrlEncode(pageUrl)));
+                Assert.That(actual, Does.Contain("&url=" + WebUtility.UrlEncode(pageUrl)));
             }
         }
 
@@ -122,7 +122,7 @@ namespace Piwik.Tracker.Tests
             }
             else
             {
-                Assert.That(actual, Does.Contain("&urlref=" + HttpUtility.UrlEncode(referer)));
+                Assert.That(actual, Does.Contain("&urlref=" + WebUtility.UrlEncode(referer)));
             }
         }
 
@@ -151,6 +151,7 @@ namespace Piwik.Tracker.Tests
 
         [Test]
         [TestCase("myCampaignName")]
+        [TestCase("Campaign mame with space")]
         [TestCase("")]
         public void SetAttributionInfo_WhenCampaignNameSpecified_IsAddedToRequest(string campaignName)
         {
@@ -164,7 +165,7 @@ namespace Piwik.Tracker.Tests
             }
             else
             {
-                Assert.That(actual, Does.Contain("&_rcn=" + HttpUtility.UrlEncode(campaignName)));
+                Assert.That(actual, Does.Contain("&_rcn=" + WebUtility.UrlEncode(campaignName)));
             }
         }
 
@@ -201,7 +202,7 @@ namespace Piwik.Tracker.Tests
             }
             else
             {
-                Assert.That(actual, Does.Contain("&_ref=" + HttpUtility.UrlEncode(referrerUrl)));
+                Assert.That(actual, Does.Contain("&_ref=" + WebUtility.UrlEncode(referrerUrl)));
             }
         }
 
@@ -250,7 +251,7 @@ namespace Piwik.Tracker.Tests
             }
             else
             {
-                Assert.That(actual, Does.Contain("&country=" + HttpUtility.UrlEncode(country)));
+                Assert.That(actual, Does.Contain("&country=" + WebUtility.UrlEncode(country)));
             }
         }
 
@@ -269,7 +270,7 @@ namespace Piwik.Tracker.Tests
             }
             else
             {
-                Assert.That(actual, Does.Contain("&region=" + HttpUtility.UrlEncode(region)));
+                Assert.That(actual, Does.Contain("&region=" + WebUtility.UrlEncode(region)));
             }
         }
 
@@ -288,7 +289,7 @@ namespace Piwik.Tracker.Tests
             }
             else
             {
-                Assert.That(actual, Does.Contain("&city=" + HttpUtility.UrlEncode(city)));
+                Assert.That(actual, Does.Contain("&city=" + WebUtility.UrlEncode(city)));
             }
         }
 
@@ -382,7 +383,7 @@ namespace Piwik.Tracker.Tests
             };
             var expectedAsJson = JsonConvert.SerializeObject(expected.Values);
             Console.WriteLine(expectedAsJson);
-            Assert.That(actual, Does.Contain("&ec_items=" + HttpUtility.UrlEncode(expectedAsJson)));
+            Assert.That(actual, Does.Contain("&ec_items=" + WebUtility.UrlEncode(expectedAsJson)));
         }
 
         [Test]
@@ -485,7 +486,7 @@ namespace Piwik.Tracker.Tests
             var actual = _sut.GetRequest(SiteId);
             if (setValue)
             {
-                Assert.That(actual, Does.Contain("&cip=" + HttpUtility.UrlEncode(expectedIp)));
+                Assert.That(actual, Does.Contain("&cip=" + WebUtility.UrlEncode(expectedIp)));
             }
             else
             {
@@ -509,7 +510,7 @@ namespace Piwik.Tracker.Tests
             var actual = _sut.GetRequest(SiteId);
             if (setValue)
             {
-                Assert.That(actual, Does.Contain("&uid=" + HttpUtility.UrlEncode(expectedId)));
+                Assert.That(actual, Does.Contain("&uid=" + WebUtility.UrlEncode(expectedId)));
             }
             else
             {
